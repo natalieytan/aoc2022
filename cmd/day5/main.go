@@ -18,9 +18,9 @@ func main() {
 		panic(err)
 	}
 
-	part1 := day5.FindTopOfCrateStackAfterMoving(day5.NewCrateStack(), instructionData)
+	part1 := day5.Part1(day5.NewCrateStack(), instructionData)
 	fmt.Printf("Part 1: %s\n", part1)
 
-	part2 := day5.FindTopOfCrateStackAfterMovingWithNewCrane(day5.NewCrateStack(), instructionData)
+	part2 := day5.Part2(day5.NewCrateStack(), instructionData)
 	fmt.Printf("Part 2: %s\n", part2)
 }
