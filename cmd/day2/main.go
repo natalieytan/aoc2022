@@ -13,17 +13,22 @@ func main() {
 		panic(err)
 	}
 
-	data, err := day2.PrepareDataPt1(bytes)
+	data, err := day2.PrepareData(bytes)
 	if err != nil {
 		panic(err)
 	}
-	totalScore := day2.TotalScoreForPlayerPt1(data)
+
+	dataPt1, err := day2.CovertToSymbolMatchups(data)
+	if err != nil {
+		panic(err)
+	}
+	totalScore := day2.Part1(dataPt1)
 	fmt.Printf("Part 1: %d\n", totalScore)
 
-	dataPt2, err := day2.PrepareDataPt2(bytes)
+	dataPt2, err := day2.CovertToOutComeMatchups(data)
 	if err != nil {
 		panic(err)
 	}
-	totalScorePt2 := day2.TotalScoreForPlayerPt2(dataPt2)
+	totalScorePt2 := day2.Part2(dataPt2)
 	fmt.Printf("Part 1: %d\n", totalScorePt2)
 }
