@@ -12,15 +12,15 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	caloriesData, err := day1.PrepareCaloriesDataPerElf(bytes)
+	caloriesData, err := day1.PrepareData(bytes)
 	if err != nil {
 		panic(err)
 	}
 
-	mostCalories := day1.MaxCaloriesForAllElves(caloriesData)
+	mostCalories := day1.Part1(caloriesData)
 	fmt.Printf("Part 1: %d\n", mostCalories)
 
-	top3 := day1.SumOfTop3ElfCalories(caloriesData)
+	top3 := day1.Part2(caloriesData)
 	fmt.Printf("Part 2: %d\n", top3)
 
 }
