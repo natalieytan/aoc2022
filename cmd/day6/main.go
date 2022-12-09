@@ -7,9 +7,9 @@ import (
 )
 
 func main() {
-	part1 := day6.CharsBeforeStartOfPacket(day6.InputStr)
+	part1 := day6.Part1(day6.InputStr)
 	fmt.Printf("Part 1: %d\n", part1)
 
-	part2 := day6.CharsBeforeStartOfMessage(day6.InputStr)
+	part2 := day6.Part2(day6.InputStr)
 	fmt.Printf("Part 1: %d\n", part2)
 }
