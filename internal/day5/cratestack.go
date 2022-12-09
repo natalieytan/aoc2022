@@ -1,7 +1,7 @@
 package day5
 
 type CrateStack struct {
-	crates [][]string
+	Crates [][]string
 }
 
 func NewCrateStack() CrateStack {
@@ -28,13 +28,13 @@ func NewCrateStack() CrateStack {
 	}
 
 	return CrateStack{
-		crates: crates,
+		Crates: crates,
 	}
 }
 
 func (crateStack CrateStack) top() string {
 	str := ""
-	for _, stack := range crateStack.crates {
+	for _, stack := range crateStack.Crates {
 		if len(stack) > 0 {
 			str += stack[len(stack)-1]
 		}
@@ -50,14 +50,14 @@ func (crateStack CrateStack) moveAll(instructions []Instruction) {
 
 func (stack CrateStack) moveOne(instruction Instruction) {
 	for i := 0; i < instruction.number; i++ {
-		fromStack := stack.crates[instruction.from-1]
+		fromStack := stack.Crates[instruction.from-1]
 		if len(fromStack) > 0 {
 			crate := fromStack[len(fromStack)-1]
-			stack.crates[instruction.from-1] = fromStack[:len(fromStack)-1]
+			stack.Crates[instruction.from-1] = fromStack[:len(fromStack)-1]
 
-			toStack := stack.crates[instruction.to-1]
+			toStack := stack.Crates[instruction.to-1]
 			toStack = append(toStack, crate)
-			stack.crates[instruction.to-1] = toStack
+			stack.Crates[instruction.to-1] = toStack
 		}
 	}
 }
@@ -69,11 +69,11 @@ func (crateStack CrateStack) moveAllCrateMover9001(instructions []Instruction) {
 }
 
 func (stack CrateStack) moveOneCrateMover9001(instruction Instruction) {
-	fromStack := stack.crates[instruction.from-1]
+	fromStack := stack.Crates[instruction.from-1]
 	cratesToMove := fromStack[len(fromStack)-(instruction.number):]
-	stack.crates[instruction.from-1] = fromStack[:len(fromStack)-(instruction.number)]
+	stack.Crates[instruction.from-1] = fromStack[:len(fromStack)-(instruction.number)]
 
-	toStack := stack.crates[instruction.to-1]
+	toStack := stack.Crates[instruction.to-1]
 	toStack = append(toStack, cratesToMove...)
-	stack.crates[instruction.to-1] = toStack
+	stack.Crates[instruction.to-1] = toStack
 }
