@@ -18,9 +18,9 @@ func main() {
 		panic(err)
 	}
 
-	part1 := day8.VisibleTreesOutsideGrid(data)
+	part1 := day8.Part1(data)
 	fmt.Printf("Part 1: %d\n", part1)
 
-	part2 := day8.MaxScenicScore(data)
+	part2 := day8.Part2(data)
 	fmt.Printf("Part 2: %d\n", part2)
 }
