@@ -18,11 +18,11 @@ func main() {
 		panic(err)
 	}
 
-	rootDirectory := day7.DirectoryTraverser(data)
+	rootDirectory := day7.BuildRootDirectory(data)
 
-	part1 := rootDirectory.TotalSizeMax100_000()
+	part1 := day7.Part1(rootDirectory)
 	fmt.Printf("Part 1: %d\n", part1)
 
-	part2 := rootDirectory.FindDirectorySizeToDelete()
+	part2 := day7.Part2(rootDirectory)
 	fmt.Printf("Part 2: %d\n", part2)
 }
