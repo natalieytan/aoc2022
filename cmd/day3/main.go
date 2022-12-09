@@ -15,10 +15,10 @@ func main() {
 
 	data := day3.PrepareData(bytes)
 
-	part1 := day3.SumOfCommonPrioritiesForAllRucksacks(data)
+	part1 := day3.Part1(data)
 	fmt.Printf("Part 1: %d\n", part1)
 
-	part2, err := day3.PrioritiesForElfBadges(data)
+	part2, err := day3.Part2(data)
 	if err != nil {
 		panic(err)
 	}
