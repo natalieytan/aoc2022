@@ -10,7 +10,9 @@ Solutions in [Golang](https://go.dev) 1.19
 go run cmd/day<x>/main.go 
 ```
 
-Solutions are run using inputs stored in `./inputs/`
+Solutions are run using inputs stored in `./inputs/` folder. 
+- `/inputs` folder has been .gitignored to prevent github scraping of inputs.
+- Add input to folder in the format `/inputs/day<x>/part<y>.txt`
 
 ## Run Tests
 
