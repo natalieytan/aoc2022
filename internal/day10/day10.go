@@ -2,6 +2,7 @@ package day10
 
 import (
 	"fmt"
+	"strings"
 )
 
 const startingRegister = 1
@@ -29,8 +30,8 @@ func Part1(operations []Operation) int {
 	return totalSignalStrength
 }
 
-func Part2(operations []Operation) [][]string {
-	crtScreen := [][]string{}
+func Part2(operations []Operation) []string {
+	crtScreen := []string{}
 	currentCrtRow := make([]string, crtWidth)
 	updateCrtScreen := func(register int, cyclesCompleted int) {
 		crtIndex := (cyclesCompleted - 1) % crtWidth
@@ -40,7 +41,7 @@ func Part2(operations []Operation) [][]string {
 			currentCrtRow[crtIndex] = darkPixel
 		}
 		if crtIndex == crtWidth-1 {
-			crtScreen = append(crtScreen, currentCrtRow)
+			crtScreen = append(crtScreen, strings.Join(currentCrtRow, ""))
 			currentCrtRow = make([]string, crtWidth)
 		}
 	}

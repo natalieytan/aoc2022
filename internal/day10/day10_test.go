@@ -25,8 +25,7 @@ func Test_Part2(t *testing.T) {
 	expectedRows := loadCrtRows(t)
 	ledResult := day10.Part2(data)
 
-	for i, crtRow := range ledResult {
-		rowResult := strings.Join(crtRow, "")
+	for i, rowResult := range ledResult {
 		if rowResult != expectedRows[i] {
 			t.Errorf("expected: %s got: %s", expectedRows[i], rowResult)
 		}
