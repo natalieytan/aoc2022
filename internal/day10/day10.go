@@ -62,14 +62,12 @@ func runOperationsWithEffect(operations []Operation, effect func(register int, c
 	cyclesCompleted := 0
 
 	for _, operation := range operations {
-		cyclesLeftToComplete := operation.cyclesToComplete()
-		for cyclesLeftToComplete > 0 {
+		for cyclesForOperation := 1; cyclesForOperation <= operation.cyclesToComplete(); cyclesForOperation++ {
 			cyclesCompleted += 1
-			cyclesLeftToComplete -= 1
 
 			effect(register, cyclesCompleted)
 
-			if operation.operationType == Addx && cyclesLeftToComplete == 0 {
+			if operation.operationType == Addx && cyclesForOperation == operation.cyclesToComplete() {
 				register += operation.value
 			}
 		}
