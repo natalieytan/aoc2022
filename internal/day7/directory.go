@@ -6,7 +6,7 @@ type Directory struct {
 }
 
 type DirectoryContents struct {
-	files          []*File
+	files          []File
 	subDirectories []*Directory
 }
 

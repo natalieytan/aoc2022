@@ -37,7 +37,6 @@ func loadRootDirectoryFromTestData(t *testing.T) *day7.Directory {
 	data, err := day7.PrepareData(bytes)
 	if err != nil {
 		t.Fatalf("failure to parse test data")
-
 	}
 
 	rootDirectory := day7.BuildRootDirectory(data)

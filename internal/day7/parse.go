@@ -7,11 +7,10 @@ import (
 	"strings"
 )
 
-func PrepareData(input []byte) ([]CommandDetails, error) {
+func PrepareData(input []byte) ([]Command, error) {
 	data := string(input)
 	rawCommands := strings.Split(data, "$")
-
-	commandDetails := make([]CommandDetails, len(rawCommands))
+	commandDetails := make([]Command, len(rawCommands)-1)
 
 	for i, rawCommand := range rawCommands[1:] {
 		commandDetail, err := parseCommandDetails(rawCommand)
@@ -24,37 +23,36 @@ func PrepareData(input []byte) ([]CommandDetails, error) {
 	return commandDetails, nil
 }
 
-func parseCommandDetails(rawCommand string) (CommandDetails, error) {
+func parseCommandDetails(rawCommand string) (Command, error) {
 	trimmedCommand := strings.TrimSpace(rawCommand)
 	if strings.HasPrefix(trimmedCommand, "cd") {
 		return parseCdCommand(trimmedCommand)
 	} else if strings.HasPrefix(trimmedCommand, "ls") {
 		return parseLsCommand(trimmedCommand)
 	} else {
-		return CommandDetails{}, fmt.Errorf("invalid command - %s", trimmedCommand)
+		return nil, fmt.Errorf("invalid command - %s", trimmedCommand)
 	}
 }
 
-func parseCdCommand(rawCommand string) (CommandDetails, error) {
+func parseCdCommand(rawCommand string) (CdCommand, error) {
 	strs := strings.Split(rawCommand, " ")
 	if len(strs) != 2 {
-		return CommandDetails{}, fmt.Errorf("invalid cd command %s --", rawCommand)
+		return CdCommand{}, fmt.Errorf("invalid cd command %s --", rawCommand)
 	}
-	return CommandDetails{
-		command:   CommandCd,
+	return CdCommand{
 		directory: strs[1],
 	}, nil
 }
 
-func parseLsCommand(rawCommand string) (CommandDetails, error) {
+func parseLsCommand(rawCommand string) (LsCommand, error) {
 	strs := strings.Split(rawCommand, "\n")
-	files := []*File{}
+	files := []File{}
 	directories := []*Directory{}
 
 	for _, rawLs := range strs[1:] {
 		contentInfo := strings.Split(rawLs, " ")
 		if len(contentInfo) > 2 {
-			return CommandDetails{}, errors.New("invalid file content info")
+			return LsCommand{}, errors.New("invalid file content info")
 		} else if contentInfo[0] == "dir" {
 			directories = append(directories, &Directory{
 				name:     contentInfo[1],
@@ -63,17 +61,16 @@ func parseLsCommand(rawCommand string) (CommandDetails, error) {
 		} else {
 			fileSize, err := strconv.Atoi(contentInfo[0])
 			if err != nil {
-				return CommandDetails{}, errors.New("invalid file content info")
+				return LsCommand{}, errors.New("invalid file content info")
 			}
-			files = append(files, &File{
+			files = append(files, File{
 				name: contentInfo[1],
 				size: fileSize,
 			})
 		}
 	}
 
-	return CommandDetails{
-		command: CommandLs,
+	return LsCommand{
 		directoryContents: DirectoryContents{
 			files:          files,
 			subDirectories: directories,

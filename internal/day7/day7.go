@@ -3,31 +3,16 @@ package day7
 const TotalDiskSpace = 70000000
 const MinUnusedSpace = 30000000
 
-func BuildRootDirectory(CommandDetails []CommandDetails) *Directory {
+func BuildRootDirectory(commands []Command) *Directory {
 	rootDirectory := &Directory{
 		name: "/",
 	}
-	lastTraversed := []*Directory{}
+	lastTraversed := []*Directory{
+		rootDirectory,
+	}
 
-	for _, commandDetail := range CommandDetails {
-		switch commandDetail.command {
-		case CommandCd:
-			if commandDetail.directory == "/" {
-				lastTraversed = []*Directory{rootDirectory}
-			} else if commandDetail.directory == ".." {
-				lastTraversed = lastTraversed[:len(lastTraversed)-1]
-			} else {
-				for _, directory := range lastTraversed[len(lastTraversed)-1].contents.subDirectories {
-					if directory.name == commandDetail.directory {
-						lastTraversed = append(lastTraversed, directory)
-					}
-				}
-
-			}
-		case CommandLs:
-			currentDirectory := lastTraversed[len(lastTraversed)-1]
-			currentDirectory.contents = commandDetail.directoryContents
-		}
+	for _, command := range commands {
+		command.Execute(&lastTraversed)
 	}
 	return rootDirectory
 }
