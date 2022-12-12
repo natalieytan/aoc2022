@@ -11,7 +11,7 @@ func Test_Part1(t *testing.T) {
 	data := loadTestData(t)
 
 	expectedResult := 31
-	result := day12.Part1(data)
+	result, _ := day12.Part1(data)
 
 	if result != expectedResult {
 		t.Errorf("expected: %d, got: %d", expectedResult, result)
@@ -22,7 +22,7 @@ func Test_Part2(t *testing.T) {
 	data := loadTestData(t)
 
 	expectedResult := 29
-	result := day12.Part2(data)
+	result, _ := day12.Part2(data)
 
 	if result != expectedResult {
 		t.Errorf("expected: %d, got: %d", expectedResult, result)

@@ -1,5 +1,7 @@
 package day12
 
+import "errors"
+
 type MetaGrid struct {
 	rows    int
 	cols    int
@@ -18,7 +20,7 @@ func newMetaGrid(grid []string) MetaGrid {
 	gridWidth := len(grid[0])
 	startPosition := Coordinate{}
 	endPosition := Coordinate{}
-	newGrid := make([][]int, len(grid))
+	heights := make([][]int, len(grid))
 
 	for rowIdx, row := range grid {
 		newRow := make([]int, len(row))
@@ -39,7 +41,7 @@ func newMetaGrid(grid []string) MetaGrid {
 				newRow[colIdx] = int(square) - 96
 			}
 		}
-		newGrid[rowIdx] = newRow
+		heights[rowIdx] = newRow
 	}
 
 	return MetaGrid{
@@ -47,25 +49,28 @@ func newMetaGrid(grid []string) MetaGrid {
 		cols:    gridWidth,
 		start:   startPosition,
 		end:     endPosition,
-		heights: newGrid,
+		heights: heights,
 	}
 }
 
-func (m MetaGrid) shortestDistanceToEndFromCoordinates(startingCoordinates []Coordinate) int {
-	shortest := m.shortestDistanceToEndFromCoordinate(m.start)
+func (m MetaGrid) shortestDistanceToEndFromCoordinates(startingCoordinates []Coordinate) (int, error) {
+	shortest, _ := m.shortestDistanceToEndFromCoordinate(m.start)
 
 	for _, coordinate := range startingCoordinates {
-		distance := m.shortestDistanceToEndFromCoordinate(coordinate)
-
-		if distance != 0 && distance < shortest {
+		distance, err := m.shortestDistanceToEndFromCoordinate(coordinate)
+		if err == nil && (distance < shortest || shortest == 0) {
 			shortest = distance
 		}
 	}
 
-	return shortest
+	if shortest == 0 {
+		return 0, errors.New("unable to find path to end")
+	}
+
+	return shortest, nil
 }
 
-func (m MetaGrid) shortestDistanceToEndFromCoordinate(startingCoordinate Coordinate) int {
+func (m MetaGrid) shortestDistanceToEndFromCoordinate(startingCoordinate Coordinate) (int, error) {
 	distanceGrid := m.sameSizeEmptyGrid()
 	searchSurroundingCoords := []Coordinate{startingCoordinate}
 
@@ -77,7 +82,7 @@ func (m MetaGrid) shortestDistanceToEndFromCoordinate(startingCoordinate Coordin
 			if currentHeight+1 >= m.heights[adjacentCoord.row][adjacentCoord.col] {
 				currentDistance := distanceGrid[coord.row][coord.col] + 1
 				if adjacentCoord.col == m.end.col && adjacentCoord.row == m.end.row {
-					return currentDistance
+					return currentDistance, nil
 				}
 				maxDistance := distanceGrid[adjacentCoord.row][adjacentCoord.col]
 				if (maxDistance == 0) || currentDistance < maxDistance {
@@ -91,7 +96,7 @@ func (m MetaGrid) shortestDistanceToEndFromCoordinate(startingCoordinate Coordin
 		searchSurroundingCoords = searchSurroundingCoords[1:]
 	}
 
-	return 0
+	return 0, errors.New("unable to find path to end")
 }
 
 func (m MetaGrid) coordinatesWithLowestElevation() []Coordinate {
