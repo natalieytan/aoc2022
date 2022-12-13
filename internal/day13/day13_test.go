@@ -8,7 +8,7 @@ import (
 )
 
 func Test_Part1(t *testing.T) {
-	data := loadTestData(t)
+	data := loadTestDataPt1(t)
 
 	expectedResult := 13
 	result := day13.Part1(data)
@@ -19,7 +19,7 @@ func Test_Part1(t *testing.T) {
 }
 
 func Test_Part2(t *testing.T) {
-	data := loadTestData2(t)
+	data := loadTestDataPt2(t)
 
 	expectedResult := 140
 	result := day13.Part2(data)
@@ -29,12 +29,12 @@ func Test_Part2(t *testing.T) {
 	}
 }
 
-func loadTestData(t *testing.T) []day13.PacketPair {
+func loadTestDataPt1(t *testing.T) []day13.PacketPair {
 	bytes, err := os.ReadFile("day13_test_sample.txt")
 	if err != nil {
 		t.Fatalf("failure to load test data")
 	}
-	packetPairs, err := day13.PrepareData(bytes)
+	packetPairs, err := day13.PrepareDataPt1(bytes)
 	if err != nil {
 		t.Fatalf(err.Error())
 	}
@@ -42,15 +42,15 @@ func loadTestData(t *testing.T) []day13.PacketPair {
 	return packetPairs
 }
 
-func loadTestData2(t *testing.T) []day13.PacketData {
+func loadTestDataPt2(t *testing.T) []day13.PacketData {
 	bytes, err := os.ReadFile("day13_test_sample.txt")
 	if err != nil {
 		t.Fatalf("failure to load test data")
 	}
-	packetPairs, err := day13.PrepareData2(bytes)
+	packetData, err := day13.PrepareData2Pt2(bytes)
 	if err != nil {
 		t.Fatalf(err.Error())
 	}
 
-	return packetPairs
+	return packetData
 }

@@ -13,7 +13,7 @@ func main() {
 		panic(err)
 	}
 
-	data, err := day13.PrepareData(bytes)
+	data, err := day13.PrepareDataPt1(bytes)
 	if err != nil {
 		panic(err)
 	}
@@ -21,7 +21,7 @@ func main() {
 	part1 := day13.Part1(data)
 	fmt.Printf("Part 1: %d\n", part1)
 
-	data2, err := day13.PrepareData2(bytes)
+	data2, err := day13.PrepareData2Pt2(bytes)
 	if err != nil {
 		panic(err)
 	}
