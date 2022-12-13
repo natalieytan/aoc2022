@@ -1,15 +1,26 @@
 package day13
 
 type PacketPair struct {
-	left  PacketData
-	right PacketData
+	left  Packet
+	right Packet
 }
 
-type PacketData struct {
-	value      int
-	isNested   bool
-	nestedList []PacketData
-	isTracer   bool
+func (p PacketPair) isRightOrder() bool {
+	return p.left.compareSize(p.right) == Smaller
+}
+
+type Packet interface {
+	compareSize(Packet) PacketSizeComparison
+	isTracer() bool
+}
+
+type PacketValue struct {
+	value int
+}
+
+type PacketList struct {
+	list   []Packet
+	tracer bool
 }
 
 type PacketSizeComparison int
@@ -20,56 +31,61 @@ const (
 	Larger
 )
 
-func (p PacketPair) isRightOrder() bool {
-	return p.left.compareSize(p.right) == Smaller
-}
+func (p1 PacketList) compareSize(p Packet) PacketSizeComparison {
+	switch p2 := p.(type) {
+	case PacketList:
+		p1len := len(p1.list)
+		p2len := len(p2.list)
 
-func (p1 PacketData) compareSize(p2 PacketData) PacketSizeComparison {
-	if p1.isNested && p2.isNested {
-		return p1.compareListSize(p2)
-	} else if p1.isNested && !p2.isNested {
-		return p1.compareSize(p2.covertToNested())
-	} else if !p1.isNested && p2.isNested {
-		return p1.covertToNested().compareSize(p2)
-	} else {
-		return p1.compareValueSize(p2)
-	}
-}
+		for i := 0; i < p2len; i++ {
+			if i > p1len-1 {
+				return Smaller
+			}
+			isP1Smaller := p1.list[i].compareSize(p2.list[i])
+			if isP1Smaller != NonDeterminate {
+				return isP1Smaller
+			}
 
-func (p1 PacketData) compareListSize(p2 PacketData) PacketSizeComparison {
-	p1len := len(p1.nestedList)
-	p2len := len(p2.nestedList)
-
-	for i := 0; i < p2len; i++ {
-		if i > p1len-1 {
-			return Smaller
 		}
-		isP1Smaller := p1.nestedList[i].compareSize(p2.nestedList[i])
-		if isP1Smaller != NonDeterminate {
-			return isP1Smaller
+		if p1len > p2len {
+			return Larger
 		}
-
-	}
-	if p1len > p2len {
-		return Larger
-	}
-	return NonDeterminate
-}
-
-func (p1 PacketData) compareValueSize(p2 PacketData) PacketSizeComparison {
-	if p1.value > p2.value {
-		return Larger
-	} else if p1.value < p2.value {
-		return Smaller
-	} else {
+		return NonDeterminate
+	case PacketValue:
+		return p1.compareSize(p2.convertToList())
+	default:
 		return NonDeterminate
 	}
 }
 
-func (p PacketData) covertToNested() PacketData {
-	return PacketData{
-		value:      0,
-		isNested:   true,
-		nestedList: []PacketData{p},
+func (p PacketList) isTracer() bool {
+	return p.tracer
+}
+
+func (p1 PacketValue) compareSize(p Packet) PacketSizeComparison {
+	switch p2 := p.(type) {
+	case PacketValue:
+		if p1.value > p2.value {
+			return Larger
+		} else if p1.value < p2.value {
+			return Smaller
+		} else {
+			return NonDeterminate
+		}
+	case PacketList:
+		return p1.convertToList().compareSize(p2)
+	default:
+		return NonDeterminate
+
 	}
+}
+
+func (p PacketValue) convertToList() PacketList {
+	return PacketList{
+		list: []Packet{p},
+	}
+}
+
+func (p PacketValue) isTracer() bool {
+	return false
 }

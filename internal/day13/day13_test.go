@@ -42,7 +42,7 @@ func loadTestDataPt1(t *testing.T) []day13.PacketPair {
 	return packetPairs
 }
 
-func loadTestDataPt2(t *testing.T) []day13.PacketData {
+func loadTestDataPt2(t *testing.T) []day13.Packet {
 	bytes, err := os.ReadFile("day13_test_sample.txt")
 	if err != nil {
 		t.Fatalf("failure to load test data")

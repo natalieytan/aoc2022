@@ -16,14 +16,14 @@ func Part1(packetPairs []PacketPair) int {
 	return sumOfIndicesInRightOrder
 }
 
-func Part2(packetPairs []PacketData) int {
+func Part2(packets []Packet) int {
 	decoderKey := 1
-	clonedPackets := packetPairs
+	clonedPackets := packets
 	sort.Slice(clonedPackets, func(i, j int) bool {
-		return packetPairs[i].compareSize(packetPairs[j]) == Smaller
+		return packets[i].compareSize(packets[j]) == Smaller
 	})
 	for idx, packet := range clonedPackets {
-		if packet.isTracer {
+		if packet.isTracer() {
 			decoderKey *= (idx + 1)
 		}
 	}
