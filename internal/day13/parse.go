@@ -35,8 +35,8 @@ func PrepareData2Pt2(input []byte) ([]PacketData, error) {
 		packets[i] = packet
 
 	}
-	packets[len(packets)-2] = newDividerPacket2()
-	packets[len(packets)-1] = newDividerPacket6()
+	packets[len(packets)-2] = newDividerPacket(2)
+	packets[len(packets)-1] = newDividerPacket(6)
 
 	return packets, nil
 }
@@ -105,7 +105,7 @@ func parsePacket(rawPacket string) (PacketData, error) {
 	return packetHistory[0], nil
 }
 
-func newDividerPacket2() PacketData {
+func newDividerPacket(value int) PacketData {
 	return PacketData{
 		isTracer: true,
 		isNested: true,
@@ -114,24 +114,7 @@ func newDividerPacket2() PacketData {
 				isNested: true,
 				nestedList: []PacketData{
 					{
-						value: 2,
-					},
-				},
-			},
-		},
-	}
-}
-
-func newDividerPacket6() PacketData {
-	return PacketData{
-		isTracer: true,
-		isNested: true,
-		nestedList: []PacketData{
-			{
-				isNested: true,
-				nestedList: []PacketData{
-					{
-						value: 6,
+						value: value,
 					},
 				},
 			},
