@@ -22,17 +22,9 @@ func (g *Grid) dropUntilStop(sand Coordinate) (Coordinate, bool) {
 		return Coordinate{}, false
 	}
 
-	downCoordinate, ok := g.tryDropDown(sand)
+	droppedCoordinate, ok := g.tryDrop(sand)
 	if ok {
-		return g.dropUntilStop(downCoordinate)
-	}
-	leftCoordinate, ok := g.tryDropLeft(sand)
-	if ok {
-		return g.dropUntilStop(leftCoordinate)
-	}
-	rightCoordinate, ok := g.tryDropRight(sand)
-	if ok {
-		return g.dropUntilStop(rightCoordinate)
+		return g.dropUntilStop(droppedCoordinate)
 	}
 
 	if g.occupiedCoordinates[sand.str()] {
@@ -40,22 +32,33 @@ func (g *Grid) dropUntilStop(sand Coordinate) (Coordinate, bool) {
 	}
 
 	g.occupiedCoordinates[sand.str()] = true
-
 	return sand, true
+}
+
+func (g *Grid) tryDrop(sand Coordinate) (Coordinate, bool) {
+	// try drop down
+	downCoordinate := sand.down()
+	if !g.occupiedCoordinates[downCoordinate.str()] {
+		return downCoordinate, true
+	}
+	// followed by diagonally left
+	leftCoordinate := sand.diagonalLeft()
+	if !g.occupiedCoordinates[leftCoordinate.str()] {
+		return leftCoordinate, true
+	}
+	// followed by diagonally right
+	rightCoordinate := sand.diagonalRight()
+	if !g.occupiedCoordinates[rightCoordinate.str()] {
+		return rightCoordinate, true
+	}
+	// not droppable - sand has stopped
+	return Coordinate{}, false
 }
 
 func (g *Grid) dropUntilStopWithFloor(sand Coordinate) (Coordinate, bool) {
-	downCoordinate, ok := g.tryDropDownWithFloor(sand)
+	droppedCordinate, ok := g.tryDropWithFloor(sand)
 	if ok {
-		return g.dropUntilStopWithFloor(downCoordinate)
-	}
-	leftCoordinate, ok := g.tryDropLeftWithFloor(sand)
-	if ok {
-		return g.dropUntilStopWithFloor(leftCoordinate)
-	}
-	rightCoordinate, ok := g.tryDropRightWithFloor(sand)
-	if ok {
-		return g.dropUntilStopWithFloor(rightCoordinate)
+		return g.dropUntilStopWithFloor(droppedCordinate)
 	}
 
 	if g.occupiedCoordinates[sand.str()] {
@@ -66,51 +69,26 @@ func (g *Grid) dropUntilStopWithFloor(sand Coordinate) (Coordinate, bool) {
 	return sand, true
 }
 
-func (g *Grid) tryDropDownWithFloor(sand Coordinate) (Coordinate, bool) {
+func (g *Grid) tryDropWithFloor(sand Coordinate) (Coordinate, bool) {
+	// try drop down
 	downCoordinate := sand.down()
-	if !g.occupiedCoordinates[downCoordinate.str()] && downCoordinate.y < g.lowestY+2 {
+	if !g.occupiedCoordinates[downCoordinate.str()] && downCoordinate.y < g.floor() {
 		return downCoordinate, true
 	}
-	return downCoordinate, false
+	// followed by diagonally left
+	leftCoordinate := sand.diagonalLeft()
+	if !g.occupiedCoordinates[leftCoordinate.str()] && downCoordinate.y < g.floor() {
+		return leftCoordinate, true
+	}
+	// followed by diagonally right
+	rightCoordinate := sand.diagonalRight()
+	if !g.occupiedCoordinates[rightCoordinate.str()] && downCoordinate.y < g.floor() {
+		return rightCoordinate, true
+	}
+	// not droppable - sand has stopped
+	return Coordinate{}, false
 }
 
-func (g *Grid) tryDropLeftWithFloor(sand Coordinate) (Coordinate, bool) {
-	downCoordinate := sand.diagonalLeft()
-	if !g.occupiedCoordinates[downCoordinate.str()] && downCoordinate.y < g.lowestY+2 {
-		return downCoordinate, true
-	}
-	return downCoordinate, false
-}
-
-func (g *Grid) tryDropRightWithFloor(sand Coordinate) (Coordinate, bool) {
-	downCoordinate := sand.diagonalRight()
-	if !g.occupiedCoordinates[downCoordinate.str()] && downCoordinate.y < g.lowestY+2 {
-		return downCoordinate, true
-	}
-	return downCoordinate, false
-}
-
-func (g *Grid) tryDropDown(sand Coordinate) (Coordinate, bool) {
-	downCoordinate := sand.down()
-	occupied := g.occupiedCoordinates[downCoordinate.str()]
-	if !occupied {
-		return downCoordinate, true
-	}
-	return downCoordinate, false
-}
-
-func (g *Grid) tryDropLeft(sand Coordinate) (Coordinate, bool) {
-	downCoordinate := sand.diagonalLeft()
-	if !g.occupiedCoordinates[downCoordinate.str()] {
-		return downCoordinate, true
-	}
-	return downCoordinate, false
-}
-
-func (g *Grid) tryDropRight(sand Coordinate) (Coordinate, bool) {
-	downCoordinate := sand.diagonalRight()
-	if !g.occupiedCoordinates[downCoordinate.str()] {
-		return downCoordinate, true
-	}
-	return downCoordinate, false
+func (g *Grid) floor() int {
+	return g.lowestY + 2
 }
