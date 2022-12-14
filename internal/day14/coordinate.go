@@ -33,33 +33,21 @@ func (c Coordinate) coordsBetween(c2 Coordinate) []Coordinate {
 	if c.x == c2.x {
 		if c.y > c2.y {
 			for i := c2.y; i <= c.y; i++ {
-				coords = append(coords, Coordinate{
-					x: c.x,
-					y: i,
-				})
+				coords = append(coords, Coordinate{x: c.x, y: i})
 			}
 		} else {
 			for i := c.y; i <= c2.y; i++ {
-				coords = append(coords, Coordinate{
-					x: c.x,
-					y: i,
-				})
+				coords = append(coords, Coordinate{x: c.x, y: i})
 			}
 		}
 	} else if c.y == c2.y {
 		if c.x > c2.x {
 			for i := c2.x; i <= c.x; i++ {
-				coords = append(coords, Coordinate{
-					x: i,
-					y: c.y,
-				})
+				coords = append(coords, Coordinate{x: i, y: c.y})
 			}
 		} else {
 			for i := c.x; i <= c2.x; i++ {
-				coords = append(coords, Coordinate{
-					x: i,
-					y: c.y,
-				})
+				coords = append(coords, Coordinate{x: i, y: c.y})
 			}
 		}
 	}
